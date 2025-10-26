@@ -39,12 +39,6 @@ jobs:
         xelatex --version
         fc-list | grep -i noto || echo "Noto fonts may not be installed"
 
-    - uses: xu-cheng/texlive-action@v3
-      with:
-        run: |
-        xelatex -interaction=nonstopmode tablet_planner.tex
-        xelatex -interaction=nonstopmode tablet_planner.tex
-
     - name: Compile LaTeX document
       run: |
         xelatex -interaction=nonstopmode tablet_planner.tex
