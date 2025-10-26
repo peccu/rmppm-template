@@ -1,0 +1,164 @@
+\documentclass[landscape]{article}
+\usepackage[paperwidth=954px,paperheight=1696px,margin=0mm]{geometry}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{fancyhdr}
+\usepackage{datetime2}
+
+% フォント設定（システムにある日本語フォントを使用）
+\setCJKmainfont{Noto Sans CJK JP}
+\setCJKsansfont{Noto Sans CJK JP}
+
+% ヘッダー・フッター設定
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% 色設定
+\definecolor{lightgray}{RGB}{240,240,240}
+\definecolor{medgray}{RGB}{200,200,200}
+\definecolor{darkgray}{RGB}{100,100,100}
+\definecolor{accent}{RGB}{100,150,200}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+% ページ1: 週間スケジュール
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west] at (current page.north west) {
+\begin{minipage}[t][1696px][t]{954px}
+
+% ヘッダー
+\begin{tikzpicture}
+\fill[accent!30] (0,0) rectangle (954px,120px);
+\node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (40px,60px) {週間スケジュール};
+\node[anchor=east,font=\fontsize{20}{24}\selectfont] at (914px,60px) {2025年 \_\_月 \_\_週};
+\end{tikzpicture}
+
+\vspace{20px}
+
+% 時間軸付き週間表
+\begin{tikzpicture}
+% 曜日ヘッダー
+\foreach \x/\day in {0/月,1/火,2/水,3/木,4/金,5/土,6/日} {
+  \fill[lightgray] ({40px+\x*130px},1440px) rectangle ({40px+(\x+1)*130px},1500px);
+  \draw[thick] ({40px+\x*130px},1440px) rectangle ({40px+(\x+1)*130px},1500px);
+  \node[font=\fontsize{18}{22}\selectfont\bfseries] at ({40px+\x*130px+65px},1470px) {\day};
+}
+
+% 時間軸と罫線
+\foreach \h in {6,7,...,23} {
+  \pgfmathsetmacro{\y}{1440-(\h-6)*80}
+  \draw[medgray] (40px,\y px) -- (950px,\y px);
+  \node[anchor=east,font=\fontsize{12}{14}\selectfont] at (35px,\y px) {\h:00};
+}
+
+% 縦線（曜日の区切り）
+\foreach \x in {0,1,...,7} {
+  \draw[thick] ({40px+\x*130px},80px) -- ({40px+\x*130px},1500px);
+}
+
+% 外枠
+\draw[very thick] (40px,80px) rectangle (950px,1500px);
+\end{tikzpicture}
+
+\end{minipage}
+};
+\end{tikzpicture}
+
+\newpage
+
+% ページ2: デイリープランナー
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west] at (current page.north west) {
+\begin{minipage}[t][1696px][t]{954px}
+
+% ヘッダー
+\begin{tikzpicture}
+\fill[accent!30] (0,0) rectangle (954px,120px);
+\node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (40px,60px) {デイリープランナー};
+\node[anchor=east,font=\fontsize{20}{24}\selectfont] at (914px,60px) {\_\_月\_\_日（\_\_）};
+\end{tikzpicture}
+
+\vspace{20px}
+
+% 左側：時間割
+\begin{tikzpicture}
+% 時間軸
+\draw[very thick] (40px,80px) rectangle (480px,1400px);
+\node[anchor=north,font=\fontsize{16}{20}\selectfont\bfseries] at (260px,1420px) {スケジュール};
+
+\foreach \h in {6,7,...,23} {
+  \pgfmathsetmacro{\y}{1400-(\h-6)*73.3}
+  \draw[medgray] (40px,\y px) -- (480px,\y px);
+  \node[anchor=east,font=\fontsize{14}{16}\selectfont] at (90px,{\y+36.65} px) {\h:00};
+  \draw[thick] (100px,\y px) -- (100px,{\y+73.3} px);
+}
+
+% 右側：TODO & メモ
+\draw[very thick] (500px,900px) rectangle (914px,1420px);
+\node[anchor=north,font=\fontsize{16}{20}\selectfont\bfseries] at (707px,1440px) {TODO};
+
+\foreach \i in {1,2,...,12} {
+  \pgfmathsetmacro{\y}{1390-\i*40}
+  \draw[lightgray] (520px,\y px) -- (894px,\y px);
+  \node[anchor=west,font=\fontsize{12}{14}\selectfont] at (530px,{\y+20} px) {$\square$};
+}
+
+% メモエリア
+\draw[very thick] (500px,80px) rectangle (914px,880px);
+\node[anchor=north,font=\fontsize{16}{20}\selectfont\bfseries] at (707px,900px) {メモ};
+
+\foreach \i in {1,2,...,18} {
+  \pgfmathsetmacro{\y}{850-\i*40}
+  \draw[lightgray] (520px,\y px) -- (894px,\y px);
+}
+\end{tikzpicture}
+
+\end{minipage}
+};
+\end{tikzpicture}
+
+\newpage
+
+% ページ3: マンスリーカレンダー
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west] at (current page.north west) {
+\begin{minipage}[t][1696px][t]{954px}
+
+% ヘッダー
+\begin{tikzpicture}
+\fill[accent!30] (0,0) rectangle (954px,120px);
+\node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (40px,60px) {マンスリーカレンダー};
+\node[anchor=east,font=\fontsize{20}{24}\selectfont] at (914px,60px) {2025年 \_\_月};
+\end{tikzpicture}
+
+\vspace{20px}
+
+% カレンダーグリッド
+\begin{tikzpicture}
+% 曜日ヘッダー
+\foreach \x/\day in {0/日,1/月,2/火,3/水,4/木,5/金,6/土} {
+  \fill[lightgray] ({40px+\x*130px},1420px) rectangle ({40px+(\x+1)*130px},1500px);
+  \draw[thick] ({40px+\x*130px},1420px) rectangle ({40px+(\x+1)*130px},1500px);
+  \node[font=\fontsize{16}{20}\selectfont\bfseries] at ({40px+\x*130px+65px},1460px) {\day};
+}
+
+% 6週分のグリッド
+\foreach \row in {0,1,...,5} {
+  \foreach \col in {0,1,...,6} {
+    \pgfmathsetmacro{\y}{1420-(\row+1)*220}
+    \draw[thick] ({40px+\col*130px},\y px) rectangle ({40px+(\col+1)*130px},{\y+220} px);
+  }
+}
+\end{tikzpicture}
+
+\end{minipage}
+};
+\end{tikzpicture}
+
+\end{document}
