@@ -10,29 +10,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
-    - name: Cache TeX Live
-      uses: actions/cache@v4
-      id: cache-texlive
-      with:
-        path: |
-          /usr/share/texlive
-          /usr/share/texmf
-          /var/lib/texmf
-          /usr/share/fonts
-        key: ${{ runner.os }}-texlive-${{ hashFiles('.github/workflows/build-pdf.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-texlive-
-    
-    - name: Install dependencies
-      if: steps.cache-texlive.outputs.cache-hit != 'true'
+        
+    - name: Install Japanese fonts
       run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-xetex texlive-fonts-extra texlive-lang-japanese fonts-noto-cjk
+        apt-get update
+        apt-get install -y fonts-noto-cjk
     
     - name: Verify TeX Live installation
       run: |
