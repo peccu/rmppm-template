@@ -6,8 +6,10 @@
 \usepackage{xeCJK}
 \usepackage{fancyhdr}
 \usepackage{datetime2}
+\usepackage{amssymb}
 
 % フォント設定（システムにある日本語フォントを使用）
+\setmainfont{DejaVu Sans}
 \setCJKmainfont{Noto Sans CJK JP}
 \setCJKsansfont{Noto Sans CJK JP}
 
@@ -43,32 +45,32 @@
 \vspace{5mm}
 
 % 時間軸付き週間表
-\begin{tikzpicture}
+\begin{tikzpicture}[x=1mm,y=1mm]
 % 曜日ヘッダー
 \foreach \x/\day in {0/月,1/火,2/水,3/木,4/金,5/土,6/日} {
   \pgfmathsetmacro{\xpos}{10+\x*34.57}
   \pgfmathsetmacro{\xposend}{10+(\x+1)*34.57}
-  \fill[lightgray] (\xpos mm,380mm) rectangle (\xposend mm,396mm);
-  \draw[thick] (\xpos mm,380mm) rectangle (\xposend mm,396mm);
+  \fill[lightgray] (\xpos,380) rectangle (\xposend,396);
+  \draw[thick] (\xpos,380) rectangle (\xposend,396);
   \pgfmathsetmacro{\xcenter}{\xpos+17.285}
-  \node[font=\fontsize{18}{22}\selectfont\bfseries] at (\xcenter mm,388mm) {\day};
+  \node[font=\fontsize{18}{22}\selectfont\bfseries] at (\xcenter,388) {\day};
 }
 
 % 時間軸と罫線
 \foreach \h in {6,7,...,23} {
   \pgfmathsetmacro{\y}{380-(\h-6)*21.1}
-  \draw[medgray] (10mm,\y mm) -- (252mm,\y mm);
-  \node[anchor=east,font=\fontsize{12}{14}\selectfont] at (9mm,\y mm) {\h:00};
+  \draw[medgray] (10,\y) -- (252,\y);
+  \node[anchor=east,font=\fontsize{12}{14}\selectfont] at (9,\y) {\h:00};
 }
 
 % 縦線（曜日の区切り）
 \foreach \x in {0,1,...,7} {
   \pgfmathsetmacro{\xpos}{10+\x*34.57}
-  \draw[thick] (\xpos mm,0mm) -- (\xpos mm,396mm);
+  \draw[thick] (\xpos,0) -- (\xpos,396);
 }
 
 % 外枠
-\draw[very thick] (10mm,0mm) rectangle (252mm,396mm);
+\draw[very thick] (10,0) rectangle (252,396);
 \end{tikzpicture}
 
 \end{minipage}
@@ -92,38 +94,38 @@
 \vspace{5mm}
 
 % 左側：時間割
-\begin{tikzpicture}
+\begin{tikzpicture}[x=1mm,y=1mm]
 % 時間軸
-\draw[very thick] (10mm,20mm) rectangle (127mm,372mm);
-\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (68.5mm,374mm) {スケジュール};
+\draw[very thick] (10,20) rectangle (127,372);
+\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (68.5,374) {スケジュール};
 
 \foreach \h in {6,7,...,23} {
   \pgfmathsetmacro{\y}{372-(\h-6)*19.56}
   \pgfmathsetmacro{\yend}{\y+19.56}
   \pgfmathsetmacro{\ycenter}{\y+9.78}
-  \draw[medgray] (10mm,\y mm) -- (127mm,\y mm);
-  \node[anchor=east,font=\fontsize{14}{16}\selectfont] at (23mm,\ycenter mm) {\h:00};
-  \draw[thick] (25mm,\y mm) -- (25mm,\yend mm);
+  \draw[medgray] (10,\y) -- (127,\y);
+  \node[anchor=east,font=\fontsize{14}{16}\selectfont] at (23,\ycenter) {\h:00};
+  \draw[thick] (25,\y) -- (25,\yend);
 }
 
 % 右側：TODO & メモ
-\draw[very thick] (132mm,236mm) rectangle (244mm,374mm);
-\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (188mm,376mm) {TODO};
+\draw[very thick] (132,236) rectangle (244,374);
+\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (188,376) {TODO};
 
 \foreach \i in {1,2,...,12} {
   \pgfmathsetmacro{\y}{368-\i*11}
   \pgfmathsetmacro{\ycenter}{\y+5.5}
-  \draw[lightgray] (137mm,\y mm) -- (239mm,\y mm);
-  \node[anchor=west,font=\fontsize{12}{14}\selectfont] at (139mm,\ycenter mm) {$\square$};
+  \draw[lightgray] (137,\y) -- (239,\y);
+  \node[anchor=west,font=\fontsize{12}{14}\selectfont] at (139,\ycenter) {$\square$};
 }
 
 % メモエリア
-\draw[very thick] (132mm,20mm) rectangle (244mm,228mm);
-\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (188mm,230mm) {メモ};
+\draw[very thick] (132,20) rectangle (244,228);
+\node[anchor=south,font=\fontsize{16}{20}\selectfont\bfseries] at (188,230) {メモ};
 
 \foreach \i in {1,2,...,18} {
   \pgfmathsetmacro{\y}{220-\i*11}
-  \draw[lightgray] (137mm,\y mm) -- (239mm,\y mm);
+  \draw[lightgray] (137,\y) -- (239,\y);
 }
 \end{tikzpicture}
 
@@ -148,15 +150,15 @@
 \vspace{5mm}
 
 % カレンダーグリッド
-\begin{tikzpicture}
+\begin{tikzpicture}[x=1mm,y=1mm]
 % 曜日ヘッダー
 \foreach \x/\day in {0/日,1/月,2/火,3/水,4/木,5/金,6/土} {
   \pgfmathsetmacro{\xpos}{10+\x*34.57}
   \pgfmathsetmacro{\xposend}{10+(\x+1)*34.57}
   \pgfmathsetmacro{\xcenter}{\xpos+17.285}
-  \fill[lightgray] (\xpos mm,377mm) rectangle (\xposend mm,398mm);
-  \draw[thick] (\xpos mm,377mm) rectangle (\xposend mm,398mm);
-  \node[font=\fontsize{16}{20}\selectfont\bfseries] at (\xcenter mm,387.5mm) {\day};
+  \fill[lightgray] (\xpos,377) rectangle (\xposend,398);
+  \draw[thick] (\xpos,377) rectangle (\xposend,398);
+  \node[font=\fontsize{16}{20}\selectfont\bfseries] at (\xcenter,387.5) {\day};
 }
 
 % 6週分のグリッド
@@ -166,7 +168,7 @@
     \pgfmathsetmacro{\yend}{\y+58.67}
     \pgfmathsetmacro{\xpos}{10+\col*34.57}
     \pgfmathsetmacro{\xposend}{10+(\col+1)*34.57}
-    \draw[thick] (\xpos mm,\y mm) rectangle (\xposend mm,\yend mm);
+    \draw[thick] (\xpos,\y) rectangle (\xposend,\yend);
   }
 }
 \end{tikzpicture}
