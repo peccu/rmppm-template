@@ -115,7 +115,7 @@
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {\monthname{\monthnum} 2025};
   % compute week number of the first day (approx) for hyperlink purposes
   \pgfcalendarjuliantoweek{\julianday}{\tempweekyear}{\tempweeknum}
-  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\the\tempweeknum}{Weekly} | \hyperlink{daily-2025-\ifnum\monthnum<10 0\fi\the\monthnum-01}{Daily}};
+  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\thetempweeknum}{Weekly} | \hyperlink{daily-2025-\ifnum\monthnum<10 0\fi\themonthnum-01}{Daily}};
   \end{tikzpicture}
   
   \vspace{5mm}
@@ -191,10 +191,10 @@
   % ヘッダー
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
-  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \weeknum: \monthname{\the\tempmonth} \the\tempday{} - \monthname{\the\endmonth} \the\endday};
+  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \weeknum: \monthname{\thetempmonth} \thetempday{} - \monthname{\theendmonth} \theendday};
   \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
-    \hyperlink{monthly-\the\tempmonth}{Monthly} | 
-    \hyperlink{daily-2025-\ifnum\tempmonth<10 0\fi\the\tempmonth-\ifnum\tempday<10 0\fi\the\tempday}{Daily}
+    \hyperlink{monthly-\thetempmonth}{Monthly} | 
+    \hyperlink{daily-2025-\ifnum\tempmonth<10 0\fi\thetempmonth-\ifnum\tempday<10 0\fi\thetempday}{Daily}
   };
   \end{tikzpicture}
   
@@ -221,7 +221,7 @@
     
     \node[font=\fontsize{14}{18}\selectfont\bfseries] at (\xcenter,390) {\dayname{\d}};
     \node[font=\fontsize{12}{14}\selectfont] at (\xcenter,384) {
-      \hyperlink{daily-\the\cyear-\ifnum\cmonth<10 0\fi\the\cmonth-\ifnum\cday<10 0\fi\the\cday}{\the\cmonth/\the\cday}
+      \hyperlink{daily-\thecyear-\ifnum\cmonth<10 0\fi\thecmonth-\ifnum\cday<10 0\fi\thecday}{\thecmonth/\thecday}
     };
   }
   
@@ -270,7 +270,7 @@
   % 月曜日を0とする
   \pgfmathtruncatemacro{\dowmonday}{mod(\cdow+6,7)}
   
-  \hypertarget{daily-\the\cyear-\ifnum\cmonth<10 0\fi\the\cmonth-\ifnum\cday<10 0\fi\the\cday}{}
+  \hypertarget{daily-\thecyear-\ifnum\cmonth<10 0\fi\thecmonth-\ifnum\cday<10 0\fi\thecday}{}
   \begin{tikzpicture}[remember picture,overlay]
   \node[anchor=north west] at (current page.north west) {
   \begin{minipage}[t][452mm][t]{254mm}
@@ -279,10 +279,10 @@
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {
-    \dayfulname{\dowmonday}, \monthname{\the\cmonth} \the\cday
+    \dayfulname{\dowmonday}, \monthname{\thecmonth} \thecday
   };
   \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
-    \hyperlink{monthly-\the\cmonth}{Monthly} | \hyperlink{weekly-\the\cweeknum}{Weekly}
+    \hyperlink{monthly-\thecmonth}{Monthly} | \hyperlink{weekly-\thecweeknum}{Weekly}
   };
   \end{tikzpicture}
   
