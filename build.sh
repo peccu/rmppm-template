@@ -6,4 +6,5 @@ sudo docker run \
      -v $PWD:/app \
      -w /app \
      --entrypoint /bin/bash \
-     texlive/texlive:latest
+     texlive/texlive:latest \
+     -c 'xelatex -interaction=nonstopmode tablet_planner.tex && echo ja || echo nein'
