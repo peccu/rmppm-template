@@ -17,15 +17,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
         
-    - name: Install Japanese fonts
-      run: |
-        apt-get update
-        apt-get install -y fonts-noto-cjk
+    # - name: Install Japanese fonts
+    #   run: |
+    #     apt-get update
+    #     apt-get install -y fonts-noto-cjk
     
-    - name: Verify TeX Live installation
-      run: |
-        xelatex --version
-        fc-list | grep -i noto || echo "Noto fonts may not be installed"
+    # - name: Verify TeX Live installation
+    #   run: |
+    #     xelatex --version
+    #     fc-list | grep -i noto || echo "Noto fonts may not be installed"
 
     - name: Compile LaTeX document
       run: |
