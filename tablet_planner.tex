@@ -37,6 +37,15 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
 
+% カウンター定義
+\newcount\julianday
+\newcount\tempyear
+\newcount\tempmonth
+\newcount\tempday
+\newcount\tempweekday
+\newcount\tempweekyear
+\newcount\tempweeknum
+
 % 月名
 \def\monthname#1{%
   \ifcase#1\or January\or February\or March\or April\or May\or June\or 
@@ -51,6 +60,23 @@
 % 曜日名（完全形）
 \def\dayfulname#1{%
   \ifcase#1 Monday\or Tuesday\or Wednesday\or Thursday\or Friday\or Saturday\or Sunday\fi%
+}
+
+% 月の日数を取得
+\def\getdaysinmonth#1#2{%
+  \ifnum#1=2
+    #2=28\relax
+  \else\ifnum#1=4
+    #2=30\relax
+  \else\ifnum#1=6
+    #2=30\relax
+  \else\ifnum#1=9
+    #2=30\relax
+  \else\ifnum#1=11
+    #2=30\relax
+  \else
+    #2=31\relax
+  \fi\fi\fi\fi\fi
 }
 
 \begin{document}
@@ -68,9 +94,9 @@
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {\monthname{\month} 2025};
-  \pgfcalendardatetojulian{2025-\month-01}{\startjulian}
-  \pgfcalendarjuliantoweek{\startjulian}{\startyear}{\startweek}
-  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\startweek}{Weekly} | \hyperlink{daily-2025-\ifnum\month<10 0\fi\month-01}{Daily}};
+  \pgfcalendardatetojulian{2025-\month-01}{\julianday}
+  \pgfcalendarjuliantoweek{\julianday}{\tempweekyear}{\tempweeknum}
+  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\the\tempweeknum}{Weekly} | \hyperlink{daily-2025-\ifnum\month<10 0\fi\month-01}{Daily}};
   \end{tikzpicture}
   
   \vspace{5mm}
@@ -88,29 +114,16 @@
   }
   
   % 月の日数を取得
-  \pgfcalendardatetojulian{2025-\month-01}{\julianstart}
-  \pgfcalendarjuliantodate{\julianstart}{\year}{\thismonth}{\day}
-  \pgfcalendarjuliantoweekday{\julianstart}{\dow}
+  \pgfcalendardatetojulian{2025-\month-01}{\julianday}
+  \pgfcalendarjuliantodate{\julianday}{\tempyear}{\tempmonth}{\tempday}
+  \pgfcalendarjuliantoweekday{\julianday}{\tempweekday}
   
   % 月曜日を0とするため調整（pgfcalendarは日曜=0）
-  \pgfmathtruncatemacro{\dowmonday}{mod(\dow+6,7)}
+  \pgfmathtruncatemacro{\dowmonday}{mod(\the\tempweekday+6,7)}
   
   % その月の日数
-  \ifnum\month=2
-    \def\maxday{28}
-  \else
-    \ifnum\month=4
-      \def\maxday{30}
-    \else\ifnum\month=6
-      \def\maxday{30}
-    \else\ifnum\month=9
-      \def\maxday{30}
-    \else\ifnum\month=11
-      \def\maxday{30}
-    \else
-      \def\maxday{31}
-    \fi\fi\fi\fi
-  \fi
+  \newcount\maxdays
+  \getdaysinmonth{\month}{\maxdays}
   
   % カレンダーグリッド描画
   \foreach \row in {0,1,...,5} {
@@ -126,7 +139,7 @@
       
       % 日付表示
       \ifnum\daynum>0
-        \ifnum\daynum<\maxday+1
+        \ifnum\daynum<\the\maxdays+1
           \node[anchor=north west,font=\fontsize{14}{16}\selectfont] at ({\xpos+2},{\yend-2}) {
             \hyperlink{daily-2025-\ifnum\month<10 0\fi\month-\ifnum\daynum<10 0\fi\daynum}{\daynum}
           };
@@ -148,11 +161,16 @@
 % ========================================
 \foreach \week in {1,2,...,54} {
   % 週の開始日（月曜日）を計算
-  \pgfcalendarweekdaytojulian{\week}{1}{2025}{\julianmonday}
-  \pgfcalendarjuliantodate{\julianmonday}{\year}{\startmonth}{\startday}
+  \pgfcalendarweekdaytojulian{\week}{1}{2025}{\julianday}
+  \pgfcalendarjuliantodate{\julianday}{\tempyear}{\tempmonth}{\tempday}
   
   % 週の終了日（日曜日）を計算
-  \pgfmathtruncatemacro{\juliansunday}{\julianmonday+6}
+  \newcount\juliansunday
+  \juliansunday=\julianday
+  \advance\juliansunday by 6
+  \newcount\endyear
+  \newcount\endmonth
+  \newcount\endday
   \pgfcalendarjuliantodate{\juliansunday}{\endyear}{\endmonth}{\endday}
   
   \hypertarget{weekly-\week}{}
@@ -163,10 +181,10 @@
   % ヘッダー
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
-  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \week: \monthname{\startmonth} \startday{} - \monthname{\endmonth} \endday};
+  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \week: \monthname{\the\tempmonth} \the\tempday{} - \monthname{\the\endmonth} \the\endday};
   \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
-    \hyperlink{monthly-\startmonth}{Monthly} | 
-    \hyperlink{daily-\year-\ifnum\startmonth<10 0\fi\startmonth-\ifnum\startday<10 0\fi\startday}{Daily}
+    \hyperlink{monthly-\the\tempmonth}{Monthly} | 
+    \hyperlink{daily-2025-\ifnum\tempmonth<10 0\fi\the\tempmonth-\ifnum\tempday<10 0\fi\the\tempday}{Daily}
   };
   \end{tikzpicture}
   
@@ -176,7 +194,13 @@
   \begin{tikzpicture}[x=1mm,y=1mm]
   % 曜日ヘッダー（月曜始まり）
   \foreach \d in {0,1,...,6} {
-    \pgfmathtruncatemacro{\currentjulian}{\julianmonday+\d}
+    \newcount\currentjulian
+    \currentjulian=\julianday
+    \advance\currentjulian by \d
+    \newcount\cyear
+    \newcount\cmonth
+    \newcount\cday
+    \newcount\cdow
     \pgfcalendarjuliantodate{\currentjulian}{\cyear}{\cmonth}{\cday}
     \pgfcalendarjuliantoweekday{\currentjulian}{\cdow}
     
@@ -189,7 +213,7 @@
     
     \node[font=\fontsize{14}{18}\selectfont\bfseries] at (\xcenter,390) {\dayname{\d}};
     \node[font=\fontsize{12}{14}\selectfont] at (\xcenter,384) {
-      \hyperlink{daily-\cyear-\ifnum\cmonth<10 0\fi\cmonth-\ifnum\cday<10 0\fi\cday}{\cmonth/\cday}
+      \hyperlink{daily-\the\cyear-\ifnum\cmonth<10 0\fi\the\cmonth-\ifnum\cday<10 0\fi\the\cday}{\the\cmonth/\the\cday}
     };
   }
   
@@ -222,16 +246,26 @@
 % ========================================
 \foreach \dayofyear in {1,2,...,365} {
   % ユリウス日から日付を計算
-  \pgfcalendardatetojulian{2025-01-01}{\julianstart}
-  \pgfmathtruncatemacro{\currentjulian}{\julianstart+\dayofyear-1}
-  \pgfcalendarjuliantodate{\currentjulian}{\year}{\month}{\day}
-  \pgfcalendarjuliantoweekday{\currentjulian}{\dow}
-  \pgfcalendarjuliantoweek{\currentjulian}{\wYear}{\weeknum}
+  \pgfcalendardatetojulian{2025-01-01}{\julianday}
+  \newcount\currentjulian
+  \currentjulian=\julianday
+  \advance\currentjulian by \dayofyear
+  \advance\currentjulian by -1
+  
+  \newcount\cyear
+  \newcount\cmonth
+  \newcount\cday
+  \newcount\cdow
+  \newcount\cweekyear
+  \newcount\cweeknum
+  \pgfcalendarjuliantodate{\currentjulian}{\cyear}{\cmonth}{\cday}
+  \pgfcalendarjuliantoweekday{\currentjulian}{\cdow}
+  \pgfcalendarjuliantoweek{\currentjulian}{\cweekyear}{\cweeknum}
   
   % 月曜日を0とする
-  \pgfmathtruncatemacro{\dowmonday}{mod(\dow+6,7)}
+  \pgfmathtruncatemacro{\dowmonday}{mod(\the\cdow+6,7)}
   
-  \hypertarget{daily-\year-\ifnum\month<10 0\fi\month-\ifnum\day<10 0\fi\day}{}
+  \hypertarget{daily-\the\cyear-\ifnum\cmonth<10 0\fi\the\cmonth-\ifnum\cday<10 0\fi\the\cday}{}
   \begin{tikzpicture}[remember picture,overlay]
   \node[anchor=north west] at (current page.north west) {
   \begin{minipage}[t][452mm][t]{254mm}
@@ -240,10 +274,10 @@
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {
-    \dayfulname{\dowmonday}, \monthname{\month} \day
+    \dayfulname{\dowmonday}, \monthname{\the\cmonth} \the\cday
   };
   \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
-    \hyperlink{monthly-\month}{Monthly} | \hyperlink{weekly-\weeknum}{Weekly}
+    \hyperlink{monthly-\the\cmonth}{Monthly} | \hyperlink{weekly-\the\cweeknum}{Weekly}
   };
   \end{tikzpicture}
   
