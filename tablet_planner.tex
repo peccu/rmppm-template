@@ -221,7 +221,7 @@
     
     \node[font=\fontsize{14}{18}\selectfont\bfseries] at (\xcenter,390) {\dayname{\d}};
     \node[font=\fontsize{12}{14}\selectfont] at (\xcenter,384) {
-      \hyperlink{daily-\thecyear-\ifnum\cmonth<10 0\fi\thecmonth-\ifnum\cday<10 0\fi\thecday}{\thecmonth/\thecday}
+      \hyperlink{daily-\the\cyear-\ifnum\the\cmonth<10 0\fi\the\cmonth-\ifnum\the\cday<10 0\fi\the\cday}{\the\cmonth/\the\cday}
     };
   }
   
@@ -270,7 +270,7 @@
   % 月曜日を0とする
   \pgfmathtruncatemacro{\dowmonday}{mod(\cdow+6,7)}
   
-  \hypertarget{daily-\thecyear-\ifnum\cmonth<10 0\fi\thecmonth-\ifnum\cday<10 0\fi\thecday}{}
+  \hypertarget{daily-\the\cyear-\ifnum\the\cmonth<10 0\fi\the\cmonth-\ifnum\the\cday<10 0\fi\the\cday}{}
   \begin{tikzpicture}[remember picture,overlay]
   \node[anchor=north west] at (current page.north west) {
   \begin{minipage}[t][452mm][t]{254mm}
@@ -279,10 +279,10 @@
   \begin{tikzpicture}
   \fill[accent!30] (0,0) rectangle (254mm,32mm);
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {
-    \dayfulname{\dowmonday}, \monthname{\thecmonth} \thecday
+    \dayfulname{\dowmonday}, \monthname{\the\cmonth} \the\cday
   };
   \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
-    \hyperlink{monthly-\thecmonth}{Monthly} | \hyperlink{weekly-\thecweeknum}{Weekly}
+    \hyperlink{monthly-\the\cmonth}{Monthly} | \hyperlink{weekly-\the\cweeknum}{Weekly}
   };
   \end{tikzpicture}
   
