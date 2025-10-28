@@ -85,6 +85,32 @@
 \ifnum\offsetMonday<0 \advance\offsetMonday by 7 \fi
 % offsetMonday now equals (weekday_of_jan1 +6) mod 7 but using integer arithmetic above
 
+% Julian日からISO週番号を求める簡易関数
+\makeatletter
+\def\pgfcalendarjuliantoweek#1#2#3{%
+  % #1 = Julian 日, #2 = 年用カウンタ, #3 = 週番号用カウンタ
+  \pgfcalendarjuliantodate{#1}{#2}{\tempmonth}{\tempday}%
+  % 年初のJulian値
+  \pgfcalendardatetojulian{\the#2-01-01}{\julianJanOne}%
+  % 曜日（0=日曜,1=月曜,...）
+  \pgfcalendarjuliantoweekday{\julianJanOne}{\dowJanOne}%
+  % 週のオフセット（月曜始まりに調整）
+  \offsetMonday=\dowJanOne
+  \advance\offsetMonday by -1
+  \ifnum\offsetMonday<0 \advance\offsetMonday by 7 \fi
+  % 経過日数
+  \tempday=#1
+  \advance\tempday by -\julianJanOne
+  % ISO週番号を求める（整数除算）
+  \tempweeknum=\tempday
+  \advance\tempweeknum by \offsetMonday
+  \divide\tempweeknum by 7
+  \advance\tempweeknum by 1
+  % 代入
+  #3=\tempweeknum
+}
+\makeatother
+
 \begin{document}
 
 % ========================================
