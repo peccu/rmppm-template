@@ -141,7 +141,7 @@
   \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {\monthname{\monthnum} 2025};
   % compute week number of the first day (approx) for hyperlink purposes
   \pgfcalendarjuliantoweek{\julianday}{\tempweekyear}{\tempweeknum}
-  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\thetempweeknum}{Weekly} | \hyperlink{daily-2025-\ifnum\monthnum<10 0\fi\themonthnum-01}{Daily}};
+  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {\hyperlink{weekly-\the\tempweeknum}{Weekly} | \hyperlink{daily-2025-\ifnum\monthnum<10 0\fi\monthnum-01}{Daily}};
   \end{tikzpicture}
   
   \vspace{5mm}
