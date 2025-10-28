@@ -217,7 +217,7 @@
 %%  % ヘッダー
 %%  \begin{tikzpicture}
 %%  \fill[accent!30] (0,0) rectangle (254mm,32mm);
-%%  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \weeknum: \monthname{\thetempmonth} \thetempday{} - \monthname{\theendmonth} \theendday};
+%%  \node[anchor=west,font=\fontsize{36}{40}\selectfont\bfseries] at (10mm,16mm) {Week \weeknum: \monthname{\tempmonth} \the\tempday{} - \monthname{\theendmonth} \theendday};
 %%  \node[anchor=east,font=\fontsize{16}{20}\selectfont] at (244mm,16mm) {
 %%    \hyperlink{monthly-\thetempmonth}{Monthly} | 
 %%    \hyperlink{daily-2025-\ifnum\tempmonth<10 0\fi\thetempmonth-\ifnum\tempday<10 0\fi\thetempday}{Daily}
